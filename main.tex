@@ -193,6 +193,43 @@ I ran transient simulations with varying injection currents for a single laser w
 \caption{Intensity vs. Current Curve of a single uncoupled laser\label{intensitycurveuncoupled}}
 \end{figure}
 
+\section{July 15, 2025}
+
+\subsection{Variable current during simulation}
+\subsubsection{Changing parameters}
+I add a parameter instead of a constant current for I\textunderscore injection, and when it is time to set a new injection current, I pause the integration, change the parameter, and resume integration.
+
+If no discontinuity smoothing is done after the change, sometimes the integrator fails to solve the system. On the other hand, if step\textunderscore on\textunderscore discontinuities() or adjust\textunderscore diff() is used after the change, there are huge spikes in the result as seen in~\ref{bigunwantedspikes}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{misc/bigunwantedspikes.png}
+\caption{Huge spikes due to discontinuous injection current changes.\label{bigunwantedspikes}}
+\end{figure}
+
+\subsubsection{Smoothed current changes}
+I coded an alternate simulation method, not using the parameter changing method, but instead using the continuous function ``conditional". It resulted in smaller spikes but was extraordinarily slow. This was only for 1 laser, so having this for a system of say 100 lasers would be impossible.
+
+So, I went back to the parameter-changing method and fixed the ``shift\textunderscore ratio" parameter to a much larger value (now equal to 1), which smooths out the discontinuity over a larger area. Now the spikes in carrier density are much more tolerable, almost not noticeable. Increasing ``shift\textunderscore ratio" did not have a noticeable effect on the intensity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment4/1laser_switched_fast_0p01shiftratio_0kappa_0ns_threshold_carrierdensity.png}
+\caption{Carrier density after a injection current change with ``shift\textunderscore ratio" = 0.01}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment4/1laser_switched_fast_0p1shiftratio_0kappa_0ns_threshold_carrierdensity.png}
+\caption{Carrier density after a injection current change with ``shift\textunderscore ratio" = 0.1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment4/1laser_switched_fast_1shiftratio_0kappa_0ns_threshold_carrierdensity.png}
+\caption{Carrier density after a injection current change with ``shift\textunderscore ratio" = 1}
+\end{figure}
+
 \bibliography{main} 
 
 \end{document}
