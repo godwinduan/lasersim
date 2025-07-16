@@ -293,6 +293,21 @@ If this chaos decay is a predictable phenomena it may be useful as a memory in a
     \item On the other hand, once we add in more than one laser, frequency mismatches will cause chaos in otherwise stable lasers. (this is in Ohtsubo)
 \end{itemize}
 
+\section{July 16, 2025}
+Investigated how light of one laser changes the threshold current of the other.
+
+\subsection{Threshold Current Changes of Two Coupled Lasers}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{2laser/experiment2/intensity_vs_current_for_0p1kappa_0tau_external_injection.png}
+\caption{Intensity vs. Current curves for a laser coupled to an external laser. Different injection values of the external laser are simulated, which change the curve's characteristics. \label{intensityvcurrentexternalinjection}}
+\end{figure}
+
+These curves stop looking like a ReLu function and look more like a softmax $\ln (1 + e^x)$ function. Linear regression is no longer a great way to find the threshold because the threshold has become. We could try modeling it instead as a softmax $\ln (a + e^{b(x-c)})$.
+
+\subsection{Meeting notes}
+
 \bibliography{main} 
 
 \end{document}
