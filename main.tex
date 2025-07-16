@@ -194,6 +194,10 @@ I ran transient simulations with varying injection currents for a single laser w
 \end{figure}
 
 \section{July 15, 2025}
+\begin{itemize}
+    \item Implemented ability to change injection current values during simulation.
+    \item Observed the decay of chaotic oscillations in a single oscillator for shorter self-coupling delays which changes the average intensity of the oscillator on a slower time scale (100s of ns). This might have potential to become memory.
+\end{itemize}
 
 \subsection{Variable current during simulation}
 \subsubsection{Changing parameters}
@@ -229,6 +233,65 @@ So, I went back to the parameter-changing method and fixed the ``shift\textunder
 \includegraphics[width=1.0\linewidth]{1laser/experiment4/1laser_switched_fast_1shiftratio_0kappa_0ns_threshold_carrierdensity.png}
 \caption{Carrier density after a injection current change with ``shift\textunderscore ratio" = 1}
 \end{figure}
+
+\subsection{One Laser Experiment 5: Effect of coupling/chaos on average power}
+
+\begin{itemize}
+    \item Gotta ask Chixuan where she got the laser parameters so I can get an accurate value of the length of the laser. This way I can calculate the parameter C accurately (right now I'm using a random length and oscillations stop for some C values greater than 1)
+    \item Once C is accurate, we can experimentally determine the criteria of the minimum coupling and coupling delay needed for oscillations.
+    \item Just realized: even though the intensity of the field inside the laser increases, the total light that escapes the laser is not necessarily increasing? Because increasing kappa here increases the 
+    \item What I did: measures mean value of intensity period to determine the avg. power. Calculates stddev of intensity over a time period to determine if there are chaotic oscillations or not.
+\end{itemize}
+
+Found that chaotic oscillations do vary the slow-varying average intensity of the laser, which is measurable by photodiodes. See below two figures.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment2/1laser_1kappa_1ns_threshold_intensity.png}
+\caption{Intensity for a self-coupled laser w/ $\kappa = 1$, $\tau = 1$ns, driven at threshold current.\label{chaoticoscdied}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment2/1laser_1kappa_1ns_threshold_intensity_filtered.png}
+\caption{Low-Pass Filtered Intensity for a self-coupled laser w/ $\kappa = 1$, $\tau = 1$ns, driven at threshold current.\label{chaoticoscdied}}
+\end{figure}
+
+\subsection{Decay of Chaos for short coupling delays}
+I had been simulating stuff at 10ns coupling delay but when I reduced it to 1ns I found that the initial chaotic oscillations die out after ~100ns. See Fig.~\ref{chaoticoscdied} and Fig.~\ref{chaoticoscdiedfiltered}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment2/1laser_0p5kappa_1ns_threshold_intensity.png}
+\caption{Intensity for a self-coupled laser w/ $\kappa = 0.5$, $\tau = 1$ns, driven at threshold current.\label{chaoticoscdied}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment2/1laser_0p5kappa_1ns_threshold_intensity_filtered.png}
+\caption{Low-Pass Filtered Intensity for a self-coupled laser w/ $\kappa = 0.5$, $\tau = 1$ns, driven at threshold current.\label{chaoticoscdiedfiltered}}
+\end{figure}
+
+Compare Fig.~\ref{chaoticoscdiedfiltered} with the much quicker rise time of the weakly self-coupled laser shown in Fig.~\ref{weakselfcouple}. This shows that the very high frequency chaotic oscillations which die out give rise to longer time scale variations in average intensity (which we can measure with our photodiodes).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1.0\linewidth]{1laser/experiment2/1laser_0p01kappa_1ns_threshold_intensity_filtered.png}
+\caption{Low-Pass Filtered Intensity for a weakly self-coupled laser w/ $\kappa = 0.01$, $\tau = 1$ns, driven at threshold current.\label{weakselfcouple}}
+\end{figure}
+
+How long is chaos sustained before it dies out? What does it depend on? If we introduce noise from spontaneous emissions, will the oscillations never die out? If we change the injection current, will the chaos come back?
+
+If this chaos decay is a predictable phenomena it may be useful as a memory in a physical compute reservoir.
+
+\subsection{Thoughts}
+\begin{itemize}
+    \item What exactly does the gain saturation term (1 + $E^2$) do? Do we only observe it for large outputs?
+    \item Implement a sliding window which measures the stddev of intensity over that window, dividing it by the average intensity over that window, as a measure of how chaotic it is.
+    \item I worry that the delays on our small chip will be so small, there will not be chaotic oscillations. The C parameter of stability is proportional to kappa (the amount of coupling) and also to the coupling delay. If the coupling delay is too small, even complete coupling will not be enough to trigger chaos.
+    \item On one hand, we could connect lasers to one another by waveguides to increase coupling. We could also add waveguide delays in a chip to add small delays.
+    \item On the other hand, once we add in more than one laser, frequency mismatches will cause chaos in otherwise stable lasers. (this is in Ohtsubo)
+\end{itemize}
 
 \bibliography{main} 
 
